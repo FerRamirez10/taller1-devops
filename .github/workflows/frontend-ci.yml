@@ -2,14 +2,16 @@ name: Frontend CI
 
 on:
   push:
-    paths:
-      - "frontend/**"
     branches:
       - main
+    paths:
+      - "frontend/**"
+  workflow_dispatch:
 
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout código
         uses: actions/checkout@v3
@@ -22,5 +24,10 @@ jobs:
 
       - name: Construir y subir imagen a Docker Hub
         run: |
-          docker build -t ferdiego10/taller1-frontend:latest ./frontend
+          IMAGE_TAG=ferdiego10/taller1-frontend:${{ github.sha }}
+          docker build -t $IMAGE_TAG ./frontend
+          docker push $IMAGE_TAG
+
+          # Etiquetar también como "latest"
+          docker tag $IMAGE_TAG ferdiego10/taller1-frontend:latest
           docker push ferdiego10/taller1-frontend:latest
