@@ -1,4 +1,4 @@
-name: Frontend CI/CD
+name: Frontend CI
 
 on:
   push:
@@ -24,7 +24,3 @@ jobs:
         run: |
           docker build -t ferdiego10/taller1-frontend:latest ./frontend
           docker push ferdiego10/taller1-frontend:latest
-
-      - name: Desplegar en Kubernetes
-        run: |
-          kubectl rollout restart deployment frontend -n default
