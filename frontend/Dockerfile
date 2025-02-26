@@ -1,38 +1,23 @@
-# Etapa de construcción
+# Etapa 1: Construcción
 FROM node:18 AS build
 
-# Establece el directorio de trabajo dentro del contenedor
 WORKDIR /app
-
-# Copia el archivo package.json y package-lock.json al contenedor
 COPY package*.json ./
-
-# Instala las dependencias
 RUN npm install
-
-# Copia todo el código fuente al contenedor
 COPY . .
-
-# Ejecuta la construcción de la aplicación React con Vite
 RUN npm run build
 
-# Etapa de producción
-FROM node:18-slim
+# Etapa 2: Servir con Nginx
+FROM nginx:alpine
 
-# Establece el directorio de trabajo dentro del contenedor
-WORKDIR /app
+# Copia los archivos de la build al servidor web
+COPY --from=build /app/dist /usr/share/nginx/html
 
-# Copia solo los archivos necesarios desde la etapa de construcción
-COPY --from=build /app/dist ./dist
+# Copia la configuración personalizada de Nginx
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-# Copia el package.json para las dependencias de producción
-COPY --from=build /app/package*.json ./
+# Expone el puerto 80 para acceder a la app
+EXPOSE 80
 
-# Instala solo las dependencias de producción
-RUN npm install --only=production
-
-# Expone el puerto 5000 para que la app esté disponible
-EXPOSE 5000
-
-# Inicia la app usando un servidor simple para servir el contenido estático de React
-CMD ["npx", "serve", "dist", "-l", "5000"]
+# Comando de inicio de Nginx
+CMD ["nginx", "-g", "daemon off;"]
