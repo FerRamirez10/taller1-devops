@@ -1,0 +1,28 @@
+replicaCount: 1
+
+image:
+  repository: ferdiego10/taller1-backend
+  pullPolicy: IfNotPresent
+  tag: "latest"
+
+service:
+  type: ClusterIP
+  port: 5000
+
+ingress:
+  enabled: true
+  host: "a7d2d23b3694d431abab04a3ed32a724-737680308.us-east-1.elb.amazonaws.com"
+  path: "/nombres"
+  pathType: Prefix
+
+resources:
+  requests:
+    cpu: "250m"
+    memory: "128Mi"
+  limits:
+    cpu: "500m"
+    memory: "256Mi"
+
+env:
+  PORT: "5000"
+  MONGO_URI: "mongodb://mongodb-service:27017/taller"

@@ -1,0 +1,24 @@
+replicaCount: 1
+
+image:
+  repository: ferdiego10/taller1-frontend
+  pullPolicy: IfNotPresent
+  tag: "latest"
+
+service:
+  type: ClusterIP
+  port: 80
+
+ingress:
+  enabled: true
+  host: "a7d2d23b3694d431abab04a3ed32a724-737680308.us-east-1.elb.amazonaws.com"
+  path: "/"
+  pathType: Prefix
+
+resources:
+  requests:
+    cpu: "250m"
+    memory: "256Mi"
+  limits:
+    cpu: "500m"
+    memory: "512Mi"

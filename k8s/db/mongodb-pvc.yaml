@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mongodb-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi  # Espacio mínimo para reducir costos
+    limits:
+      storage: 2Gi  # Límite máximo
+  storageClassName: gp2  # Clase de almacenamiento estándar en AWS EKS

@@ -1,0 +1,26 @@
+name: Backend CI
+
+on:
+  push:
+    paths:
+      - "backend/**"
+    branches:
+      - main
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout código
+        uses: actions/checkout@v3
+
+      - name: Iniciar sesión en Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_PASSWORD }}
+
+      - name: Construir y subir imagen a Docker Hub
+        run: |
+          docker build -t ferdiego10/taller1-backend:latest ./backend
+          docker push ferdiego10/taller1-backend:latest
